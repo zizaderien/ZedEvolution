@@ -20,3 +20,7 @@ Make zombies change their speed, strength, toughness, cognition, ability to craw
 If you want to contribute translations, please fork the repo, commit your translation, and open a pull request.
 
 Your translation needs to go in `ZedEvolution/Contents/mods/ZedEvolution/media/lua/shared/Translate/LANGUAGE_NAME/`.
+
+## Links
+
+[Mod on Steam  Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2729417044)
