@@ -1,0 +1,143 @@
+VERSION = 1,
+
+option ZedEvolution.DoEvolve
+{
+	type = boolean,
+	default = true,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_DoEvolve,
+	tooltip = ZedEvolution_DoEvolve_Tooltip,
+}
+
+option ZedEvolution.Factor
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Factor,
+}
+
+option ZedEvolution.Delay
+{
+	type = integer,
+	default = 0,
+	min = -365,
+	max = 365,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Delay,
+}
+
+option ZedEvolution.StartSlow
+{
+	type = integer,
+	default = 0,
+	min = -365,
+	max = 365,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_StartSlow,
+}
+
+option ZedEvolution.Speed
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Speed,
+}
+
+option ZedEvolution.Strength
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Strength,
+}
+
+option ZedEvolution.Toughness
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Toughness,
+}
+
+option ZedEvolution.Cognition
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Cognition,
+}
+
+option ZedEvolution.Crawl
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Crawl,
+}
+
+option ZedEvolution.Memory
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Memory,
+}
+
+option ZedEvolution.Sight
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Sight,
+}
+
+option ZedEvolution.Hearing
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Hearing,
+}
+
+option ZedEvolution.Transmission
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Transmission,
+}
