@@ -32,8 +32,13 @@ local function getEvolution ()
   return evolution
 end
 
+-- Rounds a number to the nearest integer
+local function round (number)
+  return math.floor(number + 0.5)
+end
+
 -- Clamp a value between two limits.
-local function clamp(min, value, max)
+local function clamp (min, value, max)
   return math.max(min, math.min(value, max))
 end
 
@@ -52,49 +57,49 @@ local function createHandlers ()
     -- Evolve speed over time only if speed is not randomized.
     createSettingHandler('Speed', SandboxVars.ZombieLore.Speed,
       function (f, d)
-        if d ~= 4 then SandboxVars.ZombieLore.Speed = math.floor(clamp(1, d - f / 10, 3)) end 
+        if d ~= 4 then SandboxVars.ZombieLore.Speed = round(clamp(1, d - f / 10, 3)) end 
       end),
 
     -- Evolve strength over time only if strength is not randomized.
     createSettingHandler('Strength', SandboxVars.ZombieLore.Strength,
       function (f, d) 
-        if d ~= 4 then SandboxVars.ZombieLore.Strength = math.floor(clamp(1, d - f / 10, 3)) end 
+        if d ~= 4 then SandboxVars.ZombieLore.Strength = round(clamp(1, d - f / 10, 3)) end 
       end),
 
     -- Evolve toughness over time only if toughness is not randomized.
     createSettingHandler('Toughness', SandboxVars.ZombieLore.Toughness,
       function (f, d) 
-        if d ~= 4 then SandboxVars.ZombieLore.Toughness = math.floor(clamp(1, d - f / 10, 3)) end 
+        if d ~= 4 then SandboxVars.ZombieLore.Toughness = round(clamp(1, d - f / 10, 3)) end 
       end),
 
     -- Evolve intelligence over time only if intelligence is not randomized.
     createSettingHandler('Cognition', SandboxVars.ZombieLore.Cognition,
       function (f, d) 
-        if d ~= 4 then SandboxVars.ZombieLore.Cognition = math.floor(clamp(1, d - f / 10, 3)) end
+        if d ~= 4 then SandboxVars.ZombieLore.Cognition = round(clamp(1, d - f / 10, 3)) end
       end),
 
     -- Evolve ability to crawl under cars over time.
     createSettingHandler('Crawl', SandboxVars.ZombieLore.CrawlUnderVehicle,
-      function (f, d) SandboxVars.ZombieLore.CrawlUnderVehicle = math.floor(clamp(1, d + f / 4.29, 7)) end),
+      function (f, d) SandboxVars.ZombieLore.CrawlUnderVehicle = round(clamp(1, d + f / 4.29, 7)) end),
 
     -- Evolve memory over time.
     createSettingHandler('Memory', SandboxVars.ZombieLore.Memory,
-      function (f, d) SandboxVars.ZombieLore.Memory = math.floor(clamp(1, d - f / 7.5, 4)) end),
+      function (f, d) SandboxVars.ZombieLore.Memory = round(clamp(1, d - f / 7.5, 4)) end),
 
     -- Evolve vision over time.
     createSettingHandler('Sight', SandboxVars.ZombieLore.Sight,
-      function (f, d) SandboxVars.ZombieLore.Sight = math.floor(clamp(1, d - f / 7.5, 4)) end),
+      function (f, d) SandboxVars.ZombieLore.Sight = round(clamp(1, d - f / 7.5, 4)) end),
 
     -- Evolve hearing over time.
     createSettingHandler('Hearing', SandboxVars.ZombieLore.Hearing,
-      function (f, d) SandboxVars.ZombieLore.Hearing = math.floor(clamp(1, d - f / 7.5, 4)) end),
+      function (f, d) SandboxVars.ZombieLore.Hearing = round(clamp(1, d - f / 7.5, 4)) end),
 
     -- Evolve transmission of zombie attacks over time only if not everyone is infected.
     createSettingHandler('Transmission', SandboxVars.ZombieLore.Transmission,
       function (f, d) 
         if d ~= 3 then
           d = (d == 4) and 3 or d
-          local temp = math.floor(clamp(1, d - f / 30, 3))
+          local temp = round(clamp(1, d - f / 30, 3))
           temp = (temp == 3) and 4 or temp
           SandboxVars.ZombieLore.Transmission = temp
         end 
