@@ -154,7 +154,7 @@ end
 
 -- Make necessary UI changes given the listbox for the settings UI.
 local function updateSettingsFromListbox (listbox)
-  addAutoConstraints(listbox)
+  --addAutoConstraints(listbox)
   for _, v in ipairs(listbox.items) do
     local item = v.item
     if item.page ~= nil and item.page.name == getText('Sandbox_ZedEvolution') then
