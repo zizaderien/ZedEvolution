@@ -41,7 +41,7 @@ end
 local function createSettingHandler (name, default, max, set)
   return {
     max = max,
-    div = 30 / max,
+    div = 30 / (max - 1),
     default = default,
     name = name,
     set = set,
