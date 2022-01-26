@@ -32,7 +32,6 @@ local function updateFromV2 (modData)
     SandboxVars.ZedEvolution.CrawlLimit or SandboxVars.ZedEvolution.CrawlUnderVehicleLimit
   SandboxVars.ZedEvolution.CrawlUnderVehicle =
     SandboxVars.ZedEvolution.Crawl or SandboxVars.ZedEvolution.CrawlUnderVehicle
-  resetSandboxVars(modData)
   return 3
 end
 
