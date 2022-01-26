@@ -100,14 +100,14 @@ option ZedEvolution.CognitionLimit
 	valueTranslation = ZCognition,
 }
 
-option ZedEvolution.CrawlLimit
+option ZedEvolution.CrawlUnderVehicleLimit
 {
 	type = enum,
 	default = 7,
 	numValues = 7,
 
 	page = ZedEvolution,
-	translation = ZedEvolution_CrawlLimit,
+	translation = ZedEvolution_CrawlUnderVehicleLimit,
 	valueTranslation = ZCrawlUnderVehicle,
 }
 
@@ -201,7 +201,7 @@ option ZedEvolution.Cognition
 	translation = ZedEvolution_Cognition,
 }
 
-option ZedEvolution.Crawl
+option ZedEvolution.CrawlUnderVehicle
 {
 	type = double,
 	default = 1.0,
@@ -209,7 +209,7 @@ option ZedEvolution.Crawl
 	max = Infinity,
 
 	page = ZedEvolution,
-	translation = ZedEvolution_Crawl,
+	translation = ZedEvolution_CrawlUnderVehicle,
 }
 
 option ZedEvolution.Memory
@@ -245,3 +245,92 @@ option ZedEvolution.Hearing
 	translation = ZedEvolution_Hearing,
 }
 
+
+
+option ZedEvolution.SpeedWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_SpeedWeight,
+}
+
+option ZedEvolution.StrengthWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_StrengthWeight,
+}
+
+option ZedEvolution.ToughnessWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_ToughnessWeight,
+}
+
+option ZedEvolution.CognitionWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_CognitionWeight,
+}
+
+option ZedEvolution.CrawlUnderVehicleWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_CrawlUnderVehicleWeight,
+}
+
+option ZedEvolution.MemoryWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_MemoryWeight,
+}
+
+option ZedEvolution.SightWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_SightWeight,
+}
+
+option ZedEvolution.HearingWeight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_HearingWeight,
+}
