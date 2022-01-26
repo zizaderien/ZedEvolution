@@ -1,9 +1,9 @@
 Sandbox_EN = {
   Sandbox_ZedEvolution = "Evolution Settings",
-  Sandbox_ZedEvolution_TBasic = "Main Evolution Options",
-  Sandbox_ZedEvolution_TFactor = "Evolution Factor Options",
-  Sandbox_ZedEvolution_TWeight = "Evolution Deviation Options",
-  Sandbox_ZedEvolution_TCap = "Evolution Cap Options",
+  Sandbox_ZedEvolution_TBasic = "General Settings",
+  Sandbox_ZedEvolution_TFactor = "Evolution Factor",
+  Sandbox_ZedEvolution_TWeight = "Evolution Deviation",
+  Sandbox_ZedEvolution_TCap = "Evolution Cap",
 
   Sandbox_ZedEvolution_DoEvolve = "Evolution",
   Sandbox_ZedEvolution_DoEvolve_tooltip = "Turn evolution on or off",
