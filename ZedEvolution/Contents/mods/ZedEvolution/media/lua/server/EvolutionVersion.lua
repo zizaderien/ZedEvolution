@@ -9,7 +9,7 @@ local function maybeInvert(name, default, new)
 end
 
 -- Calculate caps based on evolution factor being positive / negative.
--- Evolution caps were introduced in v2, so we need to account for them to keep devolution compatible.
+-- Evolution caps were introduced in v2, so we need to account for them to keep devolution compatible from v1.
 local function updateFromV1 ()
   local vars = SandboxVars.ZedEvolution
   maybeInvert('Speed', 1, 3)
@@ -25,8 +25,18 @@ local function updateFromV1 ()
   return 2
 end
 
+-- Rename all variables with Crawl to CrawlUnderVehicle to match vanilla.
+local function updateFromV2 (modData)
+  modData.CrawlUnderVehicle = modData.Crawl or modData.CrawlUnderVehicle
+  SandboxVars.ZedEvolution.CrawlUnderVehicleLimit =
+    SandboxVars.ZedEvolution.CrawlLimit or SandboxVars.ZedEvolution.CrawlUnderVehicleLimit
+  SandboxVars.ZedEvolution.CrawlUnderVehicle =
+    SandboxVars.ZedEvolution.Crawl or SandboxVars.ZedEvolution.CrawlUnderVehicle
+  return 3
+end
+
 -- Update the way the moddata / sandboxvars are stored to fit the current version of the mod.
 ZedEvolution.updateVersion = {
-  v1 = updateFromV1
+  v1 = updateFromV1,
+  v2 = updateFromV2,
 }
-
