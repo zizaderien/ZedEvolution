@@ -1,5 +1,8 @@
+require "EvolutionVersion"
+
 local modID = 'ZedEvolution'
 local handlers
+local version = 2
 
 -- Get the os.time for given time data.
 local function getTime (year, month, day, hour)
@@ -124,6 +127,13 @@ local function runHandlers ()
   getSandboxOptions():updateFromLua()
 end
 
+-- Ensure the mod's data for this save is up to date.
+local function updateToCurrentVersion (modData)
+  local saveVersion = modData.version or 1
+  while saveVersion < version do saveVersion = ZedEvolution.updateVersion['v' .. saveVersion]() end
+  modData.version = saveVersion
+end
+
 -- Enable the mod in this world only if evolution is enabled.
 Events.OnGameTimeLoaded.Add(function ()
   -- Remove leftover handlers.
@@ -133,9 +143,10 @@ Events.OnGameTimeLoaded.Add(function ()
     local modData = getGameTime():getModData()
     createHandlers()
     if modData[modID] ~= nil then
+      updateToCurrentVersion(modData[modID])
       for _, handler in ipairs(handlers) do handler.default = modData[modID][handler.name] end
     else
-      modData[modID] = {}
+      modData[modID] = { version = version }
       for _, handler in ipairs(handlers) do modData[modID][handler.name] = handler.default end
       runHandlers()
     end
