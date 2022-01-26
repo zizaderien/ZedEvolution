@@ -1,5 +1,9 @@
 Sandbox_EN = {
   Sandbox_ZedEvolution = "Evolution Settings",
+  Sandbox_ZedEvolution_TBasic = "Main Evolution Options",
+  Sandbox_ZedEvolution_TFactor = "Evolution Factor Options",
+  Sandbox_ZedEvolution_TWeight = "Evolution Deviation Options",
+  Sandbox_ZedEvolution_TCap = "Evolution Cap Options",
 
   Sandbox_ZedEvolution_DoEvolve = "Evolution",
   Sandbox_ZedEvolution_DoEvolve_tooltip = "Turn evolution on or off",
@@ -10,7 +14,7 @@ Sandbox_EN = {
   Sandbox_ZedEvolution_Speed = "Speed Factor",
   Sandbox_ZedEvolution_SpeedWeight = "Speed Deviation",
   Sandbox_ZedEvolution_SpeedLimit = "Speed Cap",
-  Sandbox_ZedEvolution_Speed_tooltip = "Evolution multiplier for speed",
+  Sandbox_ZedEvolution_Speed_tooltip = "Evolution multiplier for walking speed",
   Sandbox_ZedEvolution_SpeedWeight_tooltip = "Deviation multiplier for speed",
   Sandbox_ZedEvolution_SpeedLimit_tooltip = "Speed can't increase / decrease past this point",
 

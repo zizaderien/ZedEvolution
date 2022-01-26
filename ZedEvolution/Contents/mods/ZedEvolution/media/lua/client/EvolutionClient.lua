@@ -1,6 +1,8 @@
 
 require "SandboxOptions"
 
+local entryH = getTextManager():getFontFromEnum(UIFont.Large):getLineHeight() + 4
+
 -- Validator definitions.
 local vMeta = {
   -- Forbid correction of "Random" selection.
@@ -58,8 +60,46 @@ local validators = {
   Hearing = vMeta.ForbidNone,
 }
 
+
+local function addHeading(panel, name, before)
+  local x = 24
+  local heading = ISLabel:new(0, 0, entryH, getText(name), 1, 1, 1, 1, UIFont.Large)
+  panel:addChild(heading)
+  --heading:setX((panel.width - x - heading:getWidth()) / 2)
+  heading:setX(panel.controls[before].x)
+  heading:setY(panel.labels[before].y)
+  return heading
+end
+
+local function bumpDown(headings, elements, extra)
+  local largestY = 0
+  for _, element in pairs(elements) do
+    local addY = 0
+    for _, heading in ipairs(headings) do
+      if element.y >= heading.y and element ~= heading then 
+        addY = addY + entryH * 1.5
+      end
+    end
+    element:setY(element.y + addY + entryH * extra)
+    largestY = math.max(largestY, element.y + element.height)
+  end
+  return largestY
+end
+
 -- Update each element with the correct language information.
 local function updateSettingsPanel (panel)
+  local headings = {
+    addHeading(panel, 'Sandbox_ZedEvolution_TBasic', 'ZedEvolution.DoEvolve'),
+    addHeading(panel, 'Sandbox_ZedEvolution_TFactor', 'ZedEvolution.Speed'),
+    addHeading(panel, 'Sandbox_ZedEvolution_TWeight', 'ZedEvolution.SpeedWeight'),
+    addHeading(panel, 'Sandbox_ZedEvolution_TCap', 'ZedEvolution.SpeedLimit'),
+  }
+  
+  panel:setScrollHeight(6 + math.max(
+    bumpDown(headings, panel.labels, 0),
+    bumpDown(headings, panel.controls, 0),
+    bumpDown(headings, headings, 0.5)
+  ))
   panel.controls['ZedEvolution.TransmissionLimit'].options[3] = getText('Sandbox_ZTransmission_option4')
 end
 
