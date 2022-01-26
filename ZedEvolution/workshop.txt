@@ -1,4 +1,4 @@
-version=1
+version=3
 title=Evolution
 description=[h1]Evolution Mod[/h1]
 description=Allows zombies to evolve various attributes over time.
