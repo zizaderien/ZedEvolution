@@ -26,6 +26,18 @@ If you want to contribute translations, please fork the repo, commit your transl
 
 Your translation needs to go in `ZedEvolution/Contents/mods/ZedEvolution/media/lua/shared/Translate/LANGUAGE_NAME/`.
 
+## Support
+
+This mod is in an experimental state, so be aware that you may run into issues. Please report issues with the mod so I can look into them! 
+
+### Known Incompatible Mods
+
+The mods listed below may cause issues or unpredictable behaviour when used in combination with the Evolution mod.
+
+- Xeph Zombie Modifications [Official].
+- A harder zombie mod.
+- Customizable Zombies.
+
 ## Links
 
 [Mod on Steam  Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2729417044)
