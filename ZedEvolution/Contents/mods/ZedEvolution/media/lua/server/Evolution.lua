@@ -61,8 +61,14 @@ end
 -- Create the functions for population attribute weights.
 local function createWeightFunctions (modData)
   for _, handler in ipairs(handlers) do
-    weightFunctions[handler.name] = getPopWeight((SandboxVars.ZedEvolution[handler.name .. 'Weight'] or 100) / 100)
+    weightFunctions[handler.name] = getPopWeight(
+      SandboxVars.ZedEvolution.Weight / 100 * SandboxVars.ZedEvolution[handler.name .. 'Weight']
+    )
   end
+end
+
+local function clamp (value, min, max)
+  return math.max(min, math.min(value, max))
 end
 
 -- Create all settings handlers for supported evolution settings.
@@ -72,7 +78,7 @@ local function createHandlers ()
     createSettingHandler('Speed', SandboxVars.ZombieLore.Speed, 3,
       function (f, d, l, div)
         if d ~= 4 then
-          getSandboxOptions():set('ZombieLore.Speed', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+          getSandboxOptions():set('ZombieLore.Speed', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
         end 
       end),
 
@@ -80,7 +86,7 @@ local function createHandlers ()
     createSettingHandler('Strength', SandboxVars.ZombieLore.Strength, 3,
       function (f, d, l, div) 
         if d ~= 4 then
-          getSandboxOptions():set('ZombieLore.Strength', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+          getSandboxOptions():set('ZombieLore.Strength', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
         end 
       end),
 
@@ -88,7 +94,7 @@ local function createHandlers ()
     createSettingHandler('Toughness', SandboxVars.ZombieLore.Toughness, 3,
       function (f, d, l, div) 
         if d ~= 4 then 
-          getSandboxOptions():set('ZombieLore.Toughness', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+          getSandboxOptions():set('ZombieLore.Toughness', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
         end 
       end),
 
@@ -96,32 +102,32 @@ local function createHandlers ()
     createSettingHandler('Cognition', SandboxVars.ZombieLore.Cognition, 3,
       function (f, d, l, div) 
         if d ~= 4 then 
-          getSandboxOptions():set('ZombieLore.Cognition', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+          getSandboxOptions():set('ZombieLore.Cognition', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
         end
       end),
 
     -- Evolve ability to crawl under cars over time.
     createSettingHandler('CrawlUnderVehicle', SandboxVars.ZombieLore.CrawlUnderVehicle, 7,
       function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.CrawlUnderVehicle', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+        getSandboxOptions():set('ZombieLore.CrawlUnderVehicle', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
       end),
 
     -- Evolve memory over time.
     createSettingHandler('Memory', SandboxVars.ZombieLore.Memory, 4,
       function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.Memory', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)) )
+        getSandboxOptions():set('ZombieLore.Memory', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)) )
       end),
 
     -- Evolve vision over time.
     createSettingHandler('Sight', SandboxVars.ZombieLore.Sight, 3,
       function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.Sight', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+        getSandboxOptions():set('ZombieLore.Sight', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
       end),
 
     -- Evolve hearing over time.
     createSettingHandler('Hearing', SandboxVars.ZombieLore.Hearing, 3,
       function (f, d, l, div)
-        getSandboxOptions():set('ZombieLore.Hearing', PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max)))
+        getSandboxOptions():set('ZombieLore.Hearing', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
       end),
 
     -- Evolve transmission of zombie attacks over time only if not everyone is infected.
@@ -132,7 +138,6 @@ local function createHandlers ()
           local temp = PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max))
           temp = (temp == 3) and 4 or temp
           getSandboxOptions():set('ZombieLore.Transmission', temp)
-          --SandboxVars.ZombieLore.Transmission = temp
         end 
       end),
   }
@@ -157,15 +162,15 @@ local function changeZombieStats (zombie)
 
   -- Init moddata if it doesn't exist
   if modData[modID] == nil then
-    modData[modID] = { interval = updateInterval }
+    modData[modID] = { interval = 0 }
     for name, func in pairs(weightFunctions) do modData[modID][name] = func(ZombRandFloat(0, 1)) end
   end
 
   -- Ensure the zombie's stats are correct every so often.
-  if modData[modID].interval < updateInterval then
-    modData[modID].interval = modData[modID].interval + 1
+  if modData[modID].interval > 0 then
+    modData[modID].interval = modData[modID].interval - 1
   else
-    modData[modID].interval = 0
+    modData[modID].interval = ZombRand(400, 600)
     for _, handler in ipairs(handlers) do 
       handler.set(evolution * modData[modID][handler.name], handler.default, getLimits(handler), handler.div)
     end

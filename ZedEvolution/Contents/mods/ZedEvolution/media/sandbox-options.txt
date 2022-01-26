@@ -21,6 +21,17 @@ option ZedEvolution.Factor
 	translation = ZedEvolution_Factor,
 }
 
+option ZedEvolution.Weight
+{
+	type = double,
+	default = 100,
+	min = 0,
+	max = 100,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_Weight,
+}
+
 option ZedEvolution.Delay
 {
 	type = integer,
@@ -42,6 +53,8 @@ option ZedEvolution.StartSlow
 	page = ZedEvolution,
 	translation = ZedEvolution_StartSlow,
 }
+
+
 
 
 
@@ -250,9 +263,9 @@ option ZedEvolution.Hearing
 option ZedEvolution.SpeedWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_SpeedWeight,
@@ -261,9 +274,9 @@ option ZedEvolution.SpeedWeight
 option ZedEvolution.StrengthWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_StrengthWeight,
@@ -272,20 +285,32 @@ option ZedEvolution.StrengthWeight
 option ZedEvolution.ToughnessWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_ToughnessWeight,
 }
 
+option ZedEvolution.TransmissionWeight
+{
+	type = double,
+	default = 1,
+	min = 0,
+	max = 1,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_TransmissionWeight,
+	valueTranslation = ZTransmission,
+}
+
 option ZedEvolution.CognitionWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_CognitionWeight,
@@ -294,9 +319,9 @@ option ZedEvolution.CognitionWeight
 option ZedEvolution.CrawlUnderVehicleWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_CrawlUnderVehicleWeight,
@@ -305,9 +330,9 @@ option ZedEvolution.CrawlUnderVehicleWeight
 option ZedEvolution.MemoryWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_MemoryWeight,
@@ -316,9 +341,9 @@ option ZedEvolution.MemoryWeight
 option ZedEvolution.SightWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_SightWeight,
@@ -327,9 +352,9 @@ option ZedEvolution.SightWeight
 option ZedEvolution.HearingWeight
 {
 	type = double,
-	default = 100,
+	default = 1,
 	min = 0,
-	max = 100,
+	max = 1,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_HearingWeight,
