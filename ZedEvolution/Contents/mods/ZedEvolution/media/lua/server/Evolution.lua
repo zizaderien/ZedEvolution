@@ -4,7 +4,6 @@ local modID = 'ZedEvolution'
 local handlers
 local version = 3
 local weightFunctions = {}
-local updateInterval = 500
 local evolution = 0
 
 -- Get the os.time for given time data.
@@ -67,6 +66,7 @@ local function createWeightFunctions (modData)
   end
 end
 
+-- Clamp a value between two limits.
 local function clamp (value, min, max)
   return math.max(min, math.min(value, max))
 end
