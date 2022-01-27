@@ -172,7 +172,7 @@ local function changeZombieStats (zombie)
   else
     modData[modID].interval = ZombRand(400, 600)
     for _, handler in ipairs(handlers) do 
-      handler.set(evolution * modData[modID][handler.name], handler.default, getLimits(handler), handler.div)
+      handler.set(evolution * SandboxVars.ZedEvolution[handler.name] * modData[modID][handler.name], handler.default, getLimits(handler), handler.div)
     end
     zombie:makeInactive(true)
     zombie:makeInactive(false)
