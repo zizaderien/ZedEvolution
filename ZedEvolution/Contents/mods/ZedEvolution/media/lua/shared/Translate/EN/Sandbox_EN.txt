@@ -9,7 +9,7 @@ Sandbox_EN = {
   Sandbox_ZedEvolution_DoEvolve_tooltip = "Turn evolution on or off",
 
   Sandbox_ZedEvolution_Factor = "Evolution Factor",
-  Sandbox_ZedEvolution_Factor_tooltip = "Main evolution speed multiplier. 1.0 means evolution takes about a month.",
+  Sandbox_ZedEvolution_Factor_tooltip = "Main evolution multiplier. Negative values make evolution progress backwards.",
 
   Sandbox_ZedEvolution_Speed = "Speed Factor",
   Sandbox_ZedEvolution_SpeedWeight = "Speed Deviation",
@@ -82,4 +82,30 @@ Sandbox_EN = {
 
   Sandbox_ZedEvolution_Weight = "Evolution Deviation",
   Sandbox_ZedEvolution_Weight_tooltip = "Percentage of evolution factor affecting most zombies.",
+
+  Sandbox_ZedEvolution_Function = "Evolution Function",
+  Sandbox_ZedEvolution_Function_tooltip = "How evolution behaves over time",
+  Sandbox_ZedEvolution_Function_option1 = "Linear",
+  Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution increases forever at a steady pace",
+  Sandbox_ZedEvolution_Function_option2 = "Asymptotic",
+  Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution increasingly slowly approaches a limit",
+  Sandbox_ZedEvolution_Function_option3 = "Cyclic",
+  Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution fluctuates over time",
+
+  Sandbox_ZedEvolution_Function_option1_Param1 = "Evolution Pace"
+  Sandbox_ZedEvolution_Function_option1_Param1_tooltip = "Evolution starts to cap out after this many days"
+  Sandbox_ZedEvolution_Function_option2_Param1 = "Evolution Half-Life"
+  Sandbox_ZedEvolution_Function_option2_Param1_tooltip = "Evolution takes his many days to go halfway towards the limit"
+  Sandbox_ZedEvolution_Function_option3_Param1 = "Evolution Cycle"
+  Sandbox_ZedEvolution_Function_option3_Param1_tooltip = "Evolution cycles over the course of this many days"
+
+  Sandbox_ZedEvolution_Function_option2_Param2 = "Evolution Base"
+  Sandbox_ZedEvolution_Function_option2_Param2_tooltip = "The point from which the limit is calculated"
+  Sandbox_ZedEvolution_Function_option3_Param2 = "Lower Bound"
+  Sandbox_ZedEvolution_Function_option3_Param2_tooltip = "Evolution will stay in bounds"
+
+  Sandbox_ZedEvolution_Function_option2_Param3 = "Evolution Limit"
+  Sandbox_ZedEvolution_Function_option2_Param3_tooltip = "Evolution will only go this far from the base in either direction"
+  Sandbox_ZedEvolution_Function_option3_Param3 = "Upper Bound"
+  Sandbox_ZedEvolution_Function_option3_Param3_tooltip = "Evolution will stay in bounds"
 }

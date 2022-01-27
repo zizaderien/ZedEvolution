@@ -27,6 +27,7 @@ end
 
 -- Rename all variables with Crawl to CrawlUnderVehicle to match vanilla.
 local function updateFromV2 (modData)
+  SandboxVars.ZedEvolution.Weight = 100
   modData.CrawlUnderVehicle = modData.Crawl or modData.CrawlUnderVehicle
   SandboxVars.ZedEvolution.CrawlUnderVehicleLimit =
     SandboxVars.ZedEvolution.CrawlLimit or SandboxVars.ZedEvolution.CrawlUnderVehicleLimit

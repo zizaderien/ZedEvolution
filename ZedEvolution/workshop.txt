@@ -1,4 +1,4 @@
-version=3
+version=1
 title=Evolution
 description=[h1]Evolution Mod[/h1]
 description=Allows zombies to evolve various attributes over time.
@@ -52,7 +52,5 @@ description=[/list]
 description=
 description=[h2]Links[/h2]
 description=[url=https://github.com/Kayliii/ZedEvolution]Source code on GitHub[/url]
-tags=Build 41
-tags=Hardmode
-tags=Misc
+tags=Build 41;Hardmode;Misc
 visibility=public

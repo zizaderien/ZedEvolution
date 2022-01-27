@@ -7,7 +7,6 @@ option ZedEvolution.DoEvolve
 
 	page = ZedEvolution,
 	translation = ZedEvolution_DoEvolve,
-	tooltip = ZedEvolution_DoEvolve_Tooltip,
 }
 
 option ZedEvolution.Factor
@@ -24,7 +23,7 @@ option ZedEvolution.Factor
 option ZedEvolution.Weight
 {
 	type = double,
-	default = 100,
+	default = 50,
 	min = 0,
 	max = 100,
 
@@ -54,7 +53,46 @@ option ZedEvolution.StartSlow
 	translation = ZedEvolution_StartSlow,
 }
 
+option ZedEvolution.Function
+{
+	type = enum,
+	default = 1,
+	numValues = 3,
 
+	page = ZedEvolution,
+	translation = ZedEvolution_Function,
+	valueTranslation = ZedEvolution_Function,
+}
+
+option ZedEvolution.Param1
+{
+	type = double,
+	default = 0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+}
+
+option ZedEvolution.Param2
+{
+	type = double,
+	default = 0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+}
+
+option ZedEvolution.Param3
+{
+	type = double,
+	default = 0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+}
 
 
 

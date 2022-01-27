@@ -1,7 +1,10 @@
 
 require "SandboxOptions"
 
-local entryH = getTextManager():getFontFromEnum(UIFont.Large):getLineHeight() + 4
+local entryHLarge = getTextManager():getFontFromEnum(UIFont.Large):getLineHeight() + 4
+local entryHMedium = getTextManager():getFontFromEnum(UIFont.Medium):getLineHeight() + 6
+local modID = 'ZedEvolution'
+local OnPresetChange = { function () end }
 
 -- Validator definitions.
 local vMeta = {
@@ -61,11 +64,154 @@ local validators = {
 }
 
 
+local function createEvolutionParamDef (default, min, max)
+  return { default = default, min = min, max = max, }
+end
+
+local evolutionFuncDefs = {
+  { -- Linear
+    createEvolutionParamDef('30', 0, math.huge),
+  },
+  { -- Asymptotic
+    createEvolutionParamDef('30', 0, math.huge),
+    createEvolutionParamDef('0.0', -math.huge, math.huge),
+    createEvolutionParamDef('1.0', 0.0, math.huge),
+  },
+  { -- Cyclic
+    createEvolutionParamDef('60', 0, math.huge),
+    createEvolutionParamDef('0.0', -math.huge, math.huge),
+    createEvolutionParamDef('1.0', -math.huge, math.huge),
+  },
+}
+
+local function setElementVisible (element, visible, shiftables)
+  element:setVisible(visible)
+  local m = visible and 1 or -1
+  for _, shiftable in ipairs(shiftables) do
+    if shiftable:getY() > element:getY() then
+      shiftable:setY(shiftable:getY() + m * entryHMedium)
+    end
+  end
+  element:setY(element:getY() + m * entryHMedium / 2)
+end
+
+local function hideElement (element, shiftables)
+  element:setVisible(false)
+  for i = 1, shiftables:size() do
+    local shiftable = shiftables:get(i - 1)
+    if shiftable:getY() > element:getY() then
+      shiftable:setY(shiftable:getY() - entryHMedium)
+    end
+  end
+  --element:setY(element.y - entryHMedium / 2)
+end
+
+local function showElement (element, shiftables)
+  element:setVisible(true)
+  for _, shiftable in ipairs(shiftables) do
+    if shiftable.y > element.y then
+      shiftable:setY(shiftable.y + entryHMedium)
+    end
+  end
+  element:setY(element.y + entryHMedium / 2)
+end
+
+local function hideAll (elementGr, shiftables, careVisible)
+  for _, elements in ipairs(elementGr) do
+    for _, element in ipairs(elements) do
+      --setElementVisible(element, false, shiftables)
+      if element:isVisible() or not careVisible then
+        hideElement(element, shiftables)
+      end
+      --element:setY(element.y - entryHMedium / 2)
+    end
+  end
+end
+
+local function buildTooltip (descName, paramDef)
+  local desc = getText(descName .. '_tooltip')
+    :gsub('\\n', '\n')
+    :gsub('\\"', '"') 
+  -- Leverage Double class for math.huge values, since we want "Infinity" rather than "inf"
+  local sub = Translator.getText('Sandbox_MinMaxDefault')
+    :gsub('%%1', Double.toString(tonumber(paramDef.min)))
+    :gsub('%%2', Double.toString(tonumber(paramDef.max)))
+    :gsub('%%3', Double.toString(tonumber(paramDef.default)))
+  return desc .. '. \n' .. sub
+end
+
+local function updateFunctionSettings (_, comboBox, o, _2, setDefaults, careVisible)
+  local controls = o.controls
+  local labels = o.labels
+  local panel = o.panel
+  setDefaults = setDefaults or true
+  if careVisible == nil then careVisible = true end
+  local funcDef = evolutionFuncDefs[comboBox.selected]
+  --local panel = comboBox:getParent():getTable()
+
+
+
+  -- Show all relevant items.
+  --hideAll({controls, labels}, panel.javaObject:getControls(), careVisible)
+  --hideAll(labels, panel.labels, careVisible)
+  for i, param in ipairs(funcDef) do
+    local tl = 'Sandbox_ZedEvolution_Function_option' .. comboBox.selected .. '_Param' .. i
+    --showElement(controls[i], panel.controls)
+    --showElement(labels[i], panel.labels)
+    labels[i].name = getText(tl)
+    local oldWidth = labels[i]:getWidth()
+    labels[i]:setWidthToName()
+    local newWidth = labels[i]:getWidth()
+    labels[i]:setX(labels[i].x + oldWidth - newWidth)
+    if setDefaults then controls[i]:setText(param.default) end
+    controls[i].tooltip = buildTooltip(tl, param)
+    labels[i].tooltip = buildTooltip(tl, param)
+  end
+end
+
+
+
+local function addPrerenderHook (panel, comboBox, controls, labels)
+  local pfn = panel.prerender
+  panel.prerender = function (self)
+    pfn(self)
+    local funcDef = evolutionFuncDefs[comboBox.selected]
+    for i = 1, #funcDef do
+      local control = controls[i]
+      local label = labels[i]
+      local num = tonumber(control:getText())
+      label:setColor(1, 1, 1)
+      if num and num ~= tonumber(funcDef[i].default) then
+        label:setColor(1, 1, 0)
+      end
+      if num == nil or num < tonumber(funcDef[i].min) or num > tonumber(funcDef[i].max) then
+        control.borderColor.a = 0.9
+        control.borderColor.g = 0.0
+        control.borderColor.b = 0.0
+      end
+    end
+  end
+end
+
+local function addFunctionHandler (panel, control, paramControls)
+  local controls = {} 
+  local labels = {}
+  local comboBox = panel.controls[control]
+  for _, name in ipairs(paramControls) do
+    table.insert(controls, panel.controls[name])
+    table.insert(labels, panel.labels[name])
+  end
+
+  comboBox.onChangeArgs[1] = { panel = panel, controls = controls, labels = labels }
+  comboBox.onChange = updateFunctionSettings
+  addPrerenderHook(panel, comboBox, controls, labels)
+  updateFunctionSettings(nil, comboBox, comboBox.onChangeArgs[1], nil, true)
+end
+
 local function addHeading(panel, name, before)
   local x = 24
-  local heading = ISLabel:new(0, 0, entryH, getText(name), 1, 1, 1, 1, UIFont.Large)
+  local heading = ISLabel:new(0, 0, entryHLarge, getText(name), 1, 1, 1, 1, UIFont.Large)
   panel:addChild(heading)
-  --heading:setX((panel.width - x - heading:getWidth()) / 2)
   heading:setX(panel.controls[before].x)
   heading:setY(panel.labels[before].y)
   return heading
@@ -77,10 +223,10 @@ local function bumpDown(headings, elements, extra)
     local addY = 0
     for _, heading in ipairs(headings) do
       if element.y >= heading.y and element ~= heading then 
-        addY = addY + entryH * 1.5
+        addY = addY + entryHLarge * 1.5
       end
     end
-    element:setY(element.y + addY + entryH * extra)
+    element:setY(element.y + addY + entryHLarge * extra)
     largestY = math.max(largestY, element.y + element.height)
   end
   return largestY
@@ -100,6 +246,7 @@ local function updateSettingsPanel (panel)
     bumpDown(headings, panel.controls, 0),
     bumpDown(headings, headings, 0.5)
   ))
+  addFunctionHandler(panel, 'ZedEvolution.Function', { 'ZedEvolution.Param1', 'ZedEvolution.Param2', 'ZedEvolution.Param3' })
   panel.controls['ZedEvolution.TransmissionLimit'].options[3] = getText('Sandbox_ZTransmission_option4')
 end
 
@@ -171,6 +318,22 @@ local function addAutoConstraints (listbox)
   end
 end
 
+local function updateFunctionsFromListbox (listbox)
+  for _, v in ipairs(listbox.items) do
+    local item = v.item
+    if item.page ~= nil and item.page.name == getText('Sandbox_ZedEvolution') then
+      local controls = {} 
+      local labels = {}
+      local comboBox = item.panel.controls['ZedEvolution.Function']
+      for _, name in ipairs({ 'ZedEvolution.Param1', 'ZedEvolution.Param2', 'ZedEvolution.Param3' }) do
+        table.insert(controls, item.panel.controls[name])
+        table.insert(labels, item.panel.labels[name])
+      end
+      updateFunctionSettings(nil, comboBox, { panel = item.panel, controls = controls, labels = labels }, nil, false, false)
+    end
+  end
+end
+
 -- Make necessary UI changes given the listbox for the settings UI.
 local function updateSettingsFromListbox (listbox)
   --addAutoConstraints(listbox)
@@ -187,6 +350,7 @@ local SandboxOptionsScreen_create = SandboxOptionsScreen.create
 function SandboxOptionsScreen:create ()
    SandboxOptionsScreen_create(self)
    updateSettingsFromListbox(self.listbox)
+   updateFunctionsFromListbox(self.listbox)
 end
 
 -- Apply UI changes to server settings.
@@ -194,4 +358,10 @@ local ServerSettingsScreen_create = ServerSettingsScreen.create
 function ServerSettingsScreen:create ()
   ServerSettingsScreen_create(self)
   updateSettingsFromListbox(self.pageEdit.listbox)
+end
+
+local SandboxOptionsScreen_onPresetChange = SandboxOptionsScreen.onPresetChange
+function SandboxOptionsScreen:onPresetChange ()
+  SandboxOptionsScreen_onPresetChange(self)
+  --updateFunctionsFromListbox(self.listbox)
 end
