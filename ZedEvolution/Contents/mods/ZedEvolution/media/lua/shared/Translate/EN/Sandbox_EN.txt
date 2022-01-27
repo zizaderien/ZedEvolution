@@ -1,6 +1,7 @@
 Sandbox_EN = {
   Sandbox_ZedEvolution = "Evolution Settings",
   Sandbox_ZedEvolution_TBasic = "General Settings",
+  Sandbox_ZedEvolution_TFunc = "Evolution Function",
   Sandbox_ZedEvolution_TFactor = "Evolution Factor",
   Sandbox_ZedEvolution_TWeight = "Evolution Deviation",
   Sandbox_ZedEvolution_TCap = "Evolution Cap",
@@ -88,9 +89,9 @@ Sandbox_EN = {
   Sandbox_ZedEvolution_Function_option1 = "Linear",
   Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution increases forever at a steady pace",
   Sandbox_ZedEvolution_Function_option2 = "Asymptotic",
-  Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution increasingly slowly approaches a limit",
+  Sandbox_ZedEvolution_Function_option2_tooltip = "Evolution slows down as it appoaches a limit",
   Sandbox_ZedEvolution_Function_option3 = "Cyclic",
-  Sandbox_ZedEvolution_Function_option1_tooltip = "Evolution fluctuates over time",
+  Sandbox_ZedEvolution_Function_option3_tooltip = "Evolution fluctuates over time",
 
   Sandbox_ZedEvolution_Function_option1_Param1 = "Evolution Pace"
   Sandbox_ZedEvolution_Function_option1_Param1_tooltip = "Evolution starts to cap out after this many days"

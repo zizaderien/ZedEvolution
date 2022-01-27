@@ -67,7 +67,7 @@ option ZedEvolution.Function
 option ZedEvolution.Param1
 {
 	type = double,
-	default = 0,
+	default = 30,
 	min = -Infinity,
 	max = Infinity,
 
