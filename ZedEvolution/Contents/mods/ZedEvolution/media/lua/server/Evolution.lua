@@ -30,6 +30,7 @@ local evolution = 0
 local evolutionFunctions
 
 
+
 -----------------------------------------------
 --            Evolution Functions            --
 -----------------------------------------------
@@ -63,14 +64,21 @@ local function evolutionCyclicFunction (f, c, m, l)
   return (-math.cos(f * math.pi * 2 / c) + 1) / 2 * (l - m) + m
 end
 
-local function createEvolutionFunctions ()
-  evolutionFunctions = {
-    evolutionLinearFunction,
-    evolutionSigmoidFunction,
-    evolutionCyclicFunction,
-  }
+evolutionFunctions = {
+  evolutionLinearFunction,
+  evolutionSigmoidFunction,
+  evolutionCyclicFunction,
+}
+
+--- Applies the selected function to the provided evolution factor.
+---@param n number 'evolution
+---@return number 'net evolution'
+local function applyEvolutionFunction(n)
+  print('Raw evolution is', n)
+  return evolutionFunctions[SandboxVars.ZedEvolution.Function](
+    n, SandboxVars.ZedEvolution.Param1, SandboxVars.ZedEvolution.Param2, SandboxVars.ZedEvolution.Param3)
 end
-  
+
 
 -----------------------------------------------
 --             Utility Functions             --
@@ -268,9 +276,9 @@ end
 local function updateEvolution ()
   local gameTime = getGameTime()
   evolution = 
-    (math.max(0, getTimeElapsed(gameTime) / 86400 - SandboxVars.ZedEvolution.Delay)
+    applyEvolutionFunction((math.max(0, getTimeElapsed(gameTime) / 86400 - SandboxVars.ZedEvolution.Delay)
       + SandboxVars.ZedEvolution.StartSlow)
-      * SandboxVars.ZedEvolution.Factor
+      * SandboxVars.ZedEvolution.Factor)
   print(modID, 'Evolution factor is now:', evolution)
 end
 
