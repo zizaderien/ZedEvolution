@@ -2,7 +2,7 @@
 require "SandboxOptions"
 
 local entryHLarge = getTextManager():getFontFromEnum(UIFont.Large):getLineHeight() + 4
-local entryHMedium = getTextManager():getFontFromEnum(UIFont.Medium):getLineHeight() + 4
+local entryHMedium = getTextManager():getFontFromEnum(UIFont.Medium):getLineHeight() + 6
 local modID = 'ZedEvolution'
 local OnPresetChange = { function () end }
 
@@ -70,15 +70,15 @@ end
 
 local evolutionFuncDefs = {
   { -- Linear
-    createEvolutionParamDef('30', 0, math.huge),
+    createEvolutionParamDef('30', -math.huge, math.huge),
   },
   { -- Asymptotic
     createEvolutionParamDef('30', 0, math.huge),
     createEvolutionParamDef('0.0', -math.huge, math.huge),
-    createEvolutionParamDef('1.0', 0.0, math.huge),
+    createEvolutionParamDef('1.0', -math.huge, math.huge),
   },
   { -- Cyclic
-    createEvolutionParamDef('60', 0, math.huge),
+    createEvolutionParamDef('60', -math.huge, math.huge),
     createEvolutionParamDef('0.0', -math.huge, math.huge),
     createEvolutionParamDef('1.0', -math.huge, math.huge),
   },
@@ -94,36 +94,6 @@ local function setElementVisible (element, visible, shiftables)
   end
   element:setY(element:getY() + m * entryHMedium / 2)
 end
-
-local function hideElement (element, shiftables)
-  element:setVisible(false)
-  for _, shiftable in pairs(shiftables) do
-    if shiftable.y > element.y then
-      shiftable:setY(shiftable.y - entryHMedium)
-    end
-  end
-  element:setY(element.y - entryHMedium / 2)
-end
-
-local function showElement (element, shiftables)
-  element:setVisible(true)
-  for _, shiftable in pairs(shiftables) do
-    if shiftable.y > element.y then
-      shiftable:setY(shiftable.y + entryHMedium)
-    end
-  end
-  element:setY(element.y + entryHMedium / 2)
-end
-
-local function hideAll (elements, shiftables, careVisible)
-  for _, element in ipairs(elements) do
-    --setElementVisible(element, false, shiftables)
-    if element:isVisible() or not careVisible then
-      hideElement(element, shiftables)
-    end
-  end
-end
-
 
 
 local function showPairs (controls, labels, panel, careVisible)
@@ -274,8 +244,21 @@ local function bumpDown(headings, elements, extra)
   return largestY
 end
 
+-- Keep deprecated controls for compatibility so their values can be accessed in-game, but hide them from view. 
+local function removeDeprecatedControls (panel)
+  local deprecated = { 'ZedEvolution.Factor', 'ZedEvolution.Crawl', 'ZedEvolution.CrawlLimit', 'ZedEvolution.CrawlWeight' }
+  for _, name in ipairs(deprecated) do
+    panel.labels[name]:setVisible(false)
+    panel.labels[name]:setY(0)
+    panel.labels[name]:setWidth(0)
+    panel.controls[name]:setVisible(false)
+    panel.controls[name]:setY(0)
+  end
+end
+
 -- Update each element with the correct language information.
 local function updateSettingsPanel (panel)
+  removeDeprecatedControls(panel)
   local headings = {
     addHeading(panel, 'Sandbox_ZedEvolution_TBasic', 'ZedEvolution.DoEvolve'),
     addHeading(panel, 'Sandbox_ZedEvolution_TFunc', 'ZedEvolution.Function'),
@@ -290,9 +273,6 @@ local function updateSettingsPanel (panel)
     bumpDown(headings, headings, 0.5)
   ))
   addFunctionHandler(panel, 'ZedEvolution.Function', { 'ZedEvolution.Param1', 'ZedEvolution.Param2', 'ZedEvolution.Param3' })
-  --panel.controls[]
-  --comboBox.tooltip = getText('Sandbox_ZedEvolution_Function_option' .. comboBox.selected .. '_tooltip')
-
   panel.controls['ZedEvolution.TransmissionLimit'].options[3] = getText('Sandbox_ZTransmission_option4')
 end
 

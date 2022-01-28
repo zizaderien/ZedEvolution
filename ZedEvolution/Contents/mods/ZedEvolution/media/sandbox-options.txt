@@ -9,17 +9,6 @@ option ZedEvolution.DoEvolve
 	translation = ZedEvolution_DoEvolve,
 }
 
-option ZedEvolution.Factor
-{
-	type = double,
-	default = 1.0,
-	min = -Infinity,
-	max = Infinity,
-
-	page = ZedEvolution,
-	translation = ZedEvolution_Factor,
-}
-
 option ZedEvolution.Weight
 {
 	type = double,
@@ -396,4 +385,50 @@ option ZedEvolution.HearingWeight
 
 	page = ZedEvolution,
 	translation = ZedEvolution_HearingWeight,
+}
+
+
+
+
+option ZedEvolution.Factor
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = Deprecated,
+}
+
+option ZedEvolution.Crawl
+{
+	type = double,
+	default = 1.0,
+	min = -Infinity,
+	max = Infinity,
+
+	page = ZedEvolution,
+	translation = Deprecated,
+}
+
+option ZedEvolution.CrawlLimit
+{
+	type = enum,
+	default = 7,
+	numValues = 7,
+
+	page = ZedEvolution,
+	translation = Deprecated,
+}
+
+option ZedEvolution.CrawlWeight
+{
+	type = double,
+	default = 1,
+	min = 0,
+	max = 1,
+
+	page = ZedEvolution,
+	translation = Deprecated,
 }

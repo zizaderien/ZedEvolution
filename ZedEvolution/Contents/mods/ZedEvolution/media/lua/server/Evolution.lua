@@ -15,7 +15,7 @@ local modID = 'ZedEvolution'
 local handlers
 
 --- Sandbox data version
-local version = 3
+local version = 4
 
 --- Distribution functions
 ---@see createWeightFunctions
@@ -36,15 +36,15 @@ local evolutionFunctions
 -----------------------------------------------
 
 --- Make evolution increase linearly forever.
----@param f number 'evolution'
+---@param f number 'base evolution'
 ---@param m number 'slope is 1/m'
 ---@return number 'net evolution'
-local function evolutionLinearFunction (f, m) 
+local function evolutionLinearFunction (f, m)
   return f / m 
 end
 
 --- Make evolution approach a limit.
----@param f number - 'evolution'
+---@param f number - 'base evolution'
 ---@param h number - 'evolution gets 50% closer to the limit every multiple of h'
 ---@param b number - 'y value of the function midpoint'
 ---@param l number - 'lim(f -> ∞) = b+l; lim(f -> -∞) = b-l'
@@ -55,7 +55,7 @@ end
 
 --- Make evolution fluctuate in cycles.
 --- Relative ordinality of m and l does not matter.
----@param f number 'evolution'
+---@param f number 'base evolution'
 ---@param c number 'evolution repeats for every multiple of c'
 ---@param m number 'output values are in the interval [m, l]'
 ---@param l number 'output values are in the interval [m, l]'
@@ -71,13 +71,13 @@ evolutionFunctions = {
 }
 
 --- Applies the selected function to the provided evolution factor.
----@param n number 'evolution
+---@param n number 'base evolution
 ---@return number 'net evolution'
 local function applyEvolutionFunction(n)
-  print('Raw evolution is', n)
   return evolutionFunctions[SandboxVars.ZedEvolution.Function](
     n, SandboxVars.ZedEvolution.Param1, SandboxVars.ZedEvolution.Param2, SandboxVars.ZedEvolution.Param3)
 end
+
 
 
 -----------------------------------------------
@@ -275,10 +275,8 @@ end
 --- @see evolution
 local function updateEvolution ()
   local gameTime = getGameTime()
-  evolution = 
-    applyEvolutionFunction((math.max(0, getTimeElapsed(gameTime) / 86400 - SandboxVars.ZedEvolution.Delay)
-      + SandboxVars.ZedEvolution.StartSlow)
-      * SandboxVars.ZedEvolution.Factor)
+  evolution = applyEvolutionFunction(
+    math.max(0, getTimeElapsed(gameTime) / 86400 - SandboxVars.ZedEvolution.Delay) + SandboxVars.ZedEvolution.StartSlow)
   print(modID, 'Evolution factor is now:', evolution)
 end
 
