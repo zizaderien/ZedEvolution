@@ -156,9 +156,7 @@ end
 ---@see getPopWeight
 local function createWeightFunctions ()
   for _, handler in ipairs(handlers) do
-    weightFunctions[handler.name] = getPopWeight(
-      SandboxVars.ZedEvolution.Weight / 100 * SandboxVars.ZedEvolution[handler.name .. 'Weight']
-    )
+    weightFunctions[handler.name] = getPopWeight(SandboxVars.ZedEvolution[handler.name .. 'Weight'] / 100)
   end
 end
 
@@ -168,27 +166,31 @@ end
 --            Attribute Functions            --
 -----------------------------------------------
 
+--- Get the evolution constraints for an attribute.
+---@param name string 'Internal attribute name'
+---@return table 'Min and max values for the attribute'
+local function getLimits(name)
+  local values = {
+    SandboxVars.ZedEvolution[name .. 'Min'],
+    SandboxVars.ZedEvolution[name .. 'Limit'],
+  }
+  return { min = math.min(unpack(values)), max = math.max(unpack(values)) }
+end
+
 --- Create a handler for an evolvable attribute.
 ---@param name string 'Name of internal variables associated with this handler'
 ---@param default number 'The default value for this attribute'
----@param max number 'The highest number allowed by the game for this setting'
+---@param max number 'The maximum number vanilla allows'
 ---@param set fun(f:number, d:number, l:table, div:number):nil 'function that sets the attribute'
 local function createSettingHandler (name, default, max, set)
+  local limits = getLimits(name)
   return {
-    max = max,
+    limits = limits,
     div = 1 / (max - 1),
     default = default,
     name = name,
     set = set,
   }
-end
-
---- Get the evolution constraints for an attribute.
----@param handler table 'handler for the attribute'
----@return table 'Min and max values for the attribute'
-local function getLimits(handler)
-  local values = { handler.default, SandboxVars.ZedEvolution[handler.name .. 'Limit'] }
-  return { min = math.min(unpack(values)), max = math.max(unpack(values)) }
 end
 
 --- Create all settings handlers for supported evolution settings.
@@ -298,7 +300,11 @@ local function changeZombieStats (zombie)
   else
     modData[modID].interval = ZombRand(400, 600)
     for _, handler in ipairs(handlers) do 
-      handler.set(evolution * SandboxVars.ZedEvolution[handler.name] * modData[modID][handler.name], handler.default, getLimits(handler), handler.div)
+      handler.set(
+        evolution * SandboxVars.ZedEvolution[handler.name] * modData[modID][handler.name],
+        handler.default,
+        handler.limits,
+        handler.div)
     end
     zombie:makeInactive(true)
     zombie:makeInactive(false)
@@ -318,10 +324,14 @@ Events.OnGameTimeLoaded.Add(function ()
     createHandlers()
     if modData[modID] ~= nil then
       updateToCurrentVersion(modData[modID])
-      for _, handler in ipairs(handlers) do handler.default = modData[modID][handler.name] end
+      for _, handler in ipairs(handlers) do 
+        handler.default = modData[modID][handler.name]
+      end
     else
       modData[modID] = { version = version }
-      for _, handler in ipairs(handlers) do modData[modID][handler.name] = handler.default end
+      for _, handler in ipairs(handlers) do 
+        modData[modID][handler.name] = handler.default 
+      end
     end
     createWeightFunctions()
     updateEvolution()

@@ -9,17 +9,6 @@ option ZedEvolution.DoEvolve
 	translation = ZedEvolution_DoEvolve,
 }
 
-option ZedEvolution.Weight
-{
-	type = double,
-	default = 50,
-	min = 0,
-	max = 100,
-
-	page = ZedEvolution,
-	translation = ZedEvolution_Weight,
-}
-
 option ZedEvolution.Delay
 {
 	type = integer,
@@ -85,6 +74,17 @@ option ZedEvolution.Param3
 
 
 
+option ZedEvolution.SpeedMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_SpeedMin,
+	valueTranslation = ZSpeed,
+}
+
 option ZedEvolution.SpeedLimit
 {
 	type = enum,
@@ -94,6 +94,17 @@ option ZedEvolution.SpeedLimit
 	page = ZedEvolution,
 	translation = ZedEvolution_SpeedLimit,
 	valueTranslation = ZSpeed,
+}
+
+option ZedEvolution.StrengthMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_StrengthMin,
+	valueTranslation = ZStrength,
 }
 
 option ZedEvolution.StrengthLimit
@@ -107,6 +118,17 @@ option ZedEvolution.StrengthLimit
 	valueTranslation = ZStrength,
 }
 
+option ZedEvolution.ToughnessMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_ToughnessMin,
+	valueTranslation = ZToughness,
+}
+
 option ZedEvolution.ToughnessLimit
 {
 	type = enum,
@@ -116,6 +138,17 @@ option ZedEvolution.ToughnessLimit
 	page = ZedEvolution,
 	translation = ZedEvolution_ToughnessLimit,
 	valueTranslation = ZToughness,
+}
+
+option ZedEvolution.TransmissionMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_TransmissionMin,
+	valueTranslation = ZTransmission,
 }
 
 option ZedEvolution.TransmissionLimit
@@ -129,6 +162,17 @@ option ZedEvolution.TransmissionLimit
 	valueTranslation = ZTransmission,
 }
 
+option ZedEvolution.CognitionMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_CognitionMin,
+	valueTranslation = ZCognition,
+}
+
 option ZedEvolution.CognitionLimit
 {
 	type = enum,
@@ -138,6 +182,17 @@ option ZedEvolution.CognitionLimit
 	page = ZedEvolution,
 	translation = ZedEvolution_CognitionLimit,
 	valueTranslation = ZCognition,
+}
+
+option ZedEvolution.CrawlUnderVehicleMin
+{
+	type = enum,
+	default = 1,
+	numValues = 7,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_CrawlUnderVehicleMin,
+	valueTranslation = ZCrawlUnderVehicle,
 }
 
 option ZedEvolution.CrawlUnderVehicleLimit
@@ -151,6 +206,17 @@ option ZedEvolution.CrawlUnderVehicleLimit
 	valueTranslation = ZCrawlUnderVehicle,
 }
 
+option ZedEvolution.MemoryMin
+{
+	type = enum,
+	default = 4,
+	numValues = 4,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_MemoryMin,
+	valueTranslation = ZMemory,
+}
+
 option ZedEvolution.MemoryLimit
 {
 	type = enum,
@@ -162,6 +228,17 @@ option ZedEvolution.MemoryLimit
 	valueTranslation = ZMemory,
 }
 
+option ZedEvolution.SightMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_SightMin,
+	valueTranslation = ZSight,
+}
+
 option ZedEvolution.SightLimit
 {
 	type = enum,
@@ -171,6 +248,17 @@ option ZedEvolution.SightLimit
 	page = ZedEvolution,
 	translation = ZedEvolution_SightLimit,
 	valueTranslation = ZSight,
+}
+
+option ZedEvolution.HearingMin
+{
+	type = enum,
+	default = 3,
+	numValues = 3,
+
+	page = ZedEvolution,
+	translation = ZedEvolution_HearingMin,
+	valueTranslation = ZHearing,
 }
 
 option ZedEvolution.HearingLimit
@@ -290,9 +378,9 @@ option ZedEvolution.Hearing
 option ZedEvolution.SpeedWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_SpeedWeight,
@@ -301,9 +389,9 @@ option ZedEvolution.SpeedWeight
 option ZedEvolution.StrengthWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_StrengthWeight,
@@ -312,9 +400,9 @@ option ZedEvolution.StrengthWeight
 option ZedEvolution.ToughnessWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_ToughnessWeight,
@@ -323,9 +411,9 @@ option ZedEvolution.ToughnessWeight
 option ZedEvolution.TransmissionWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_TransmissionWeight,
@@ -335,9 +423,9 @@ option ZedEvolution.TransmissionWeight
 option ZedEvolution.CognitionWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_CognitionWeight,
@@ -346,9 +434,9 @@ option ZedEvolution.CognitionWeight
 option ZedEvolution.CrawlUnderVehicleWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_CrawlUnderVehicleWeight,
@@ -357,9 +445,9 @@ option ZedEvolution.CrawlUnderVehicleWeight
 option ZedEvolution.MemoryWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 1100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_MemoryWeight,
@@ -368,9 +456,9 @@ option ZedEvolution.MemoryWeight
 option ZedEvolution.SightWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_SightWeight,
@@ -379,9 +467,9 @@ option ZedEvolution.SightWeight
 option ZedEvolution.HearingWeight
 {
 	type = double,
-	default = 1,
+	default = 50,
 	min = 0,
-	max = 1,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_HearingWeight,
@@ -428,6 +516,17 @@ option ZedEvolution.CrawlWeight
 	default = 1,
 	min = 0,
 	max = 1,
+
+	page = ZedEvolution,
+	translation = Deprecated,
+}
+
+option ZedEvolution.Weight
+{
+	type = double,
+	default = 50,
+	min = 0,
+	max = 100,
 
 	page = ZedEvolution,
 	translation = Deprecated,

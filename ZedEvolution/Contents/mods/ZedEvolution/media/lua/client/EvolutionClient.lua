@@ -246,7 +246,11 @@ end
 
 -- Keep deprecated controls for compatibility so their values can be accessed in-game, but hide them from view. 
 local function removeDeprecatedControls (panel)
-  local deprecated = { 'ZedEvolution.Factor', 'ZedEvolution.Crawl', 'ZedEvolution.CrawlLimit', 'ZedEvolution.CrawlWeight' }
+  local deprecated = { 
+    'ZedEvolution.Factor', 'ZedEvolution.Crawl', 
+    'ZedEvolution.CrawlLimit', 'ZedEvolution.CrawlWeight',
+    'ZedEvolution.Weight',
+  }
   for _, name in ipairs(deprecated) do
     panel.labels[name]:setVisible(false)
     panel.labels[name]:setY(0)
@@ -264,7 +268,7 @@ local function updateSettingsPanel (panel)
     addHeading(panel, 'Sandbox_ZedEvolution_TFunc', 'ZedEvolution.Function'),
     addHeading(panel, 'Sandbox_ZedEvolution_TFactor', 'ZedEvolution.Speed'),
     addHeading(panel, 'Sandbox_ZedEvolution_TWeight', 'ZedEvolution.SpeedWeight'),
-    addHeading(panel, 'Sandbox_ZedEvolution_TCap', 'ZedEvolution.SpeedLimit'),
+    addHeading(panel, 'Sandbox_ZedEvolution_TCap', 'ZedEvolution.SpeedMin'),
   }
   
   panel:setScrollHeight(6 + math.max(
@@ -274,6 +278,7 @@ local function updateSettingsPanel (panel)
   ))
   addFunctionHandler(panel, 'ZedEvolution.Function', { 'ZedEvolution.Param1', 'ZedEvolution.Param2', 'ZedEvolution.Param3' })
   panel.controls['ZedEvolution.TransmissionLimit'].options[3] = getText('Sandbox_ZTransmission_option4')
+  panel.controls['ZedEvolution.TransmissionMin'].options[3] = getText('Sandbox_ZTransmission_option4')
 end
 
 -- Add constraints to a trio of associated evolution settings.
