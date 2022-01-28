@@ -22,7 +22,6 @@ Make zombies change their speed, strength, toughness, cognition, ability to craw
 ### Evolution Limits
 
 - Set how strong or weak zombies can get compared to the zombie lore settings.
-- "Random" zombie lore settings are unaffected by evolution.
 - Transmission is hard capped at "Blood + Saliva" and cannot become "Everyone's Infected".
 
 ### Evolution Factor

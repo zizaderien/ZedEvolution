@@ -24,7 +24,6 @@ description=
 description=[h3]Evolution Limits[/h3]
 description=[list]
 description=[*]Set how strong or weak zombies can get compared to the zombie lore settings.
-description=[*]"Random" zombie lore settings are unaffected by evolution.
 description=[*]Transmission is hard capped at "Blood + Saliva" and cannot become "Everyone's Infected".
 description=[/list]
 description=
