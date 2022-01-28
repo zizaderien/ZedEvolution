@@ -23,13 +23,12 @@ Make zombies change their speed, strength, toughness, cognition, ability to craw
 
 - Set how strong or weak zombies can get compared to the zombie lore settings.
 - "Random" zombie lore settings are unaffected by evolution.
-- Remember to make the evolution factor for an attribute negative if you want zombies to get weaker.
 - Transmission is hard capped at "Blood + Saliva" and cannot become "Everyone's Infected".
 
 ### Evolution Factor
 
 - Set how quickly zombies evolve certain attributes compared to others.
-- If the evolution factor is negative (for weakening zombies), remember to set the cap lower than your zombie lore settings.
+- Set the factor to a negative number to make zombies weaker.
 - Set the factor to 0 to stop zombies from evolving this attribute.
 
 ### Deviation Factor
