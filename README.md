@@ -6,32 +6,41 @@ Make zombies change their speed, strength, toughness, cognition, ability to craw
 
 ## Customization
 
+### General Settings
+
+- Turn evolution on or off.
+- Set how many days you have before evolutions begins. A negative value means evolution has already begun.
+- Set how evolved zombies are from the start. A negative value means zombies start "devolved".
+
+### Evolution Function
+
+- Set the way in which evolution progresses to be either linear, asymptotic or cyclic.
+- For a linear function, you can specify how long it takes to reach 100% evolution.
+- For an asymptotic function, you can specify the base value, the limit, and how long it takes to reach 50% evolution.
+- For a cyclic function, you can specify how often it repeats, and between which numbers evolution fluctuates.
+
+### Evolution Limits
+
+- Set how strong or weak zombies can get compared to the zombie lore settings.
+- Transmission is hard capped at "Blood + Saliva" and cannot become "Everyone's Infected".
+
 ### Evolution Factor
 
-- The main "Evolution Factor" setting determines the overall pace of evolution. Setting it to 1 makes evolution take place over the course of about a month.
-- Individual attribute factors can be customized using multipliers. 
-- A multiplier of 0 means the attribute never changes. >0 means zombies become better at it. <0 means zombies become worse at it. 
-- If the number is between -1 and 1, zombies evolve this attribute slower than usual. If the number is >1 or <-1, they evolve faster.
+- Set how quickly zombies evolve certain attributes compared to others.
+- Set the factor to a negative number to make zombies weaker.
+- Set the factor to 0 to stop zombies from evolving this attribute.
 
-### Evolution Deviation
+### Deviation Factor
 
-- The main "Evolution Deviation" setting determines how strongly most zombies are affected by evolution.
-- Individual attribute deviation can be customized using multipliers.
-- If the deviation is at 100%, all zombies are maximally affected by evolution. If the deviation is at 0%, no zombies are affected by evolution at all.
-- For any value <50%, evolved zombies are progressively more rare. For any value >50%, unevolved zombies are progressively more rare. A value of 50% has an even distribution.
+- Set how evolution of certain attributes is distributed across the zombie population.
+- Half of zombies will be affected less than the given percentage, and half will be affected more.
+- As the percentage approaches 0% or 100%, zombies become more similar.
+- As the percentage approaches 50%, zombies become more diverse.
 
-### Evolution Cap
+### Zombie Lore
 
-- All vanilla zombie lore settings are treated as baseline attributes. When the evolution of your world is 0 (usually at the beginning), they will behave according to those settings.
-- Attribute caps indicate how much stronger or weaker zombies can become compared to their baseline.
-- If the main evolution factor or attribute factor are below 0, zombies get weaker. Therefore the cap should be weaker than your zombie lore setting, or zombies won't change. If they're both below 0, the minus signs cancel out.
-- Transmission evolves from "None" -> "Blood" -> "Blood + Saliva". It does not progress towards "Everyone's Infected."
-
-### Misc.
-
-- Any zombie lore settings that are set to "Random" are unaffected by evolution.
-- The "Evolution Delay" setting will start a countdown of however many days are entered there and start evolution after that. This number can be negative to make evolution begin before the game starts.
-- The "Starting Progression" setting will preemptively apply the given number of days worth of evolution as a baseline. This number can be negative to make zombies start "devolved" compared to the provided settings.
+- Any attributes set to "Random" are unaffected by evolution.
+- Transmission is unaffected by evolution if set to "Everyone's Infected".
 
 ## Contribute
 
