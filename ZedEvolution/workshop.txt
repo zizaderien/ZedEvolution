@@ -54,14 +54,10 @@ description=
 description=If you want to contribute a translation for your language, please see my GitHub page.
 description=
 description=[h3]Known Incompatible Mods[/h3]
-description=The mods listed below may cause issues or unpredictable behaviour when used in combination with the Evolution mod.
-description=[list]
-description=[*]Xeph Zombie Modifications [Official].
-description=[*]A harder zombie mod.
-description=[*]Customizable Zombies.
-description=[/list]
+description=[url=https://github.com/Kayliii/ZedEvolution/wiki/Compatibility-with-other-mods]Full compatibility list[/url]
+description=Any mod not on this list that you're curious about? Let me know!
 description=
 description=[h2]Links[/h2]
 description=[url=https://github.com/Kayliii/ZedEvolution]Source code on GitHub[/url]
-tags=Build 41;Hardmode;Misc
+tags=Build 41;Hardmode;Misc;Multiplayer
 visibility=public

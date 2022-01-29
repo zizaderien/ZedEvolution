@@ -12,7 +12,7 @@ local modID = 'ZedEvolution'
 
 --- Handlers for updating attribute values
 ---@see createHandlers
-local handlers
+local handlers = {}
 
 --- Sandbox data version
 local version = 4
@@ -28,6 +28,70 @@ local evolution = 0
 
 --- Values associated with the ZedEvolution.Function enum
 local evolutionFunctions
+
+
+
+-----------------------------------------------
+--             Utility Functions             --
+-----------------------------------------------
+
+--- Ensure the mod's data for this save is up to date.
+---@param modData table 'ModData for this world'
+local function updateToCurrentVersion (modData)
+  local saveVersion = modData.version or 1
+  while saveVersion < version do saveVersion = ZedEvolution.updateVersion['v' .. saveVersion](modData) end
+  modData.version = saveVersion
+end
+
+--- Clamp a value between two limits.
+---@param value number 'value to be clamped'
+---@param min number 'lowest allowed value'
+---@param max number 'highest allowed value'
+---@return number 'clamped value'
+local function clamp (value, min, max)
+  return math.max(min, math.min(value, max))
+end
+
+--- Get the os.time for given time data.
+---@param year integer 'current year'
+---@param month integer 'current month'
+---@param day integer 'current day'
+---@param hour number 'current hour'
+---@return integer 'os.time'
+local function getTime (year, month, day, hour)
+  return os.time{ year = year, month = month, day = day, hour = math.floor(hour)}
+end
+
+--- Get the value for a sandbox option.
+---@param name string 'name of the sandbox option'
+local function getVar (name)
+  return getSandboxOptions():getOptionByName(name):getValue()
+end
+
+--- Set the value for a sandbox option.
+---@param name string 'name of the sandbox option'
+---@param value any 'new value'
+local function setVar (name, value)
+  return getSandboxOptions():set(name, value)
+end
+
+--- Get the os.difftime for both the current and start time.
+---@param gameTime zombie.GameTime 'PZ GameTime object'
+---@return integer 'seconds elapsed in world'
+local function getTimeElapsed (gameTime)
+  local nowTime = getTime(
+    gameTime:getYear(),
+    gameTime:getMonth(),
+    gameTime:getDay(),
+    gameTime:getTimeOfDay())
+  local startTime = getTime(
+    -- Can't use gameTime:getStart[...] for this because on servers it seems to return the wrong time for the client.
+    getVar('StartYear') + getSandboxOptions():getFirstYear() - 1,
+    getVar('StartMonth') -1,
+    getVar('StartDay') -1,
+    gameTime:getStartTimeOfDay())
+  return os.difftime(nowTime, startTime)
+end
 
 
 
@@ -74,58 +138,8 @@ evolutionFunctions = {
 ---@param n number 'base evolution
 ---@return number 'net evolution'
 local function applyEvolutionFunction(n)
-  return evolutionFunctions[SandboxVars.ZedEvolution.Function](
-    n, SandboxVars.ZedEvolution.Param1, SandboxVars.ZedEvolution.Param2, SandboxVars.ZedEvolution.Param3)
-end
-
-
-
------------------------------------------------
---             Utility Functions             --
------------------------------------------------
-
---- Ensure the mod's data for this save is up to date.
----@param modData table 'ModData for this world'
-local function updateToCurrentVersion (modData)
-  local saveVersion = modData.version or 1
-  while saveVersion < version do saveVersion = ZedEvolution.updateVersion['v' .. saveVersion](modData) end
-  modData.version = saveVersion
-end
-
---- Clamp a value between two limits.
----@param value number 'value to be clamped'
----@param min number 'lowest allowed value'
----@param max number 'highest allowed value'
----@return number 'clamped value'
-local function clamp (value, min, max)
-  return math.max(min, math.min(value, max))
-end
-
---- Get the os.time for given time data.
----@param year integer 'current year'
----@param month integer 'current month'
----@param day integer 'current day'
----@param hour number 'current hour'
----@return integer 'os.time'
-local function getTime (year, month, day, hour)
-  return os.time{ year = year, month = month, day = day, hour = math.floor(hour)}
-end
-
---- Get the os.difftime for both the current and start time.
----@param gameTime zombie.GameTime 'PZ GameTime object'
----@return integer 'seconds elapsed in world'
-local function getTimeElapsed (gameTime)
-  local nowTime = getTime(
-    gameTime:getYear(),
-    gameTime:getMonth(),
-    gameTime:getDay(),
-    gameTime:getTimeOfDay())
-  local startTime = getTime(
-    gameTime:getStartYear(),
-    gameTime:getStartMonth(),
-    gameTime:getStartDay(),
-    gameTime:getStartTimeOfDay())
-  return os.difftime(nowTime, startTime)
+  return evolutionFunctions[getVar('ZedEvolution.Function')](
+    n, getVar('ZedEvolution.Param1'), getVar('ZedEvolution.Param2'), getVar('ZedEvolution.Param3'))
 end
 
 
@@ -155,8 +169,8 @@ end
 ---@see weightFunctions
 ---@see getPopWeight
 local function createWeightFunctions ()
-  for _, handler in ipairs(handlers) do
-    weightFunctions[handler.name] = getPopWeight(SandboxVars.ZedEvolution[handler.name .. 'Weight'] / 100)
+  for name, handler in pairs(handlers) do
+    weightFunctions[name] = getPopWeight(getVar('ZedEvolution.' .. name .. 'Weight') / 100)
   end
 end
 
@@ -166,13 +180,22 @@ end
 --            Attribute Functions            --
 -----------------------------------------------
 
+--- Sets the appropriate value for an attribute handler
+---@param handler table 'the handler to use'
+---@param multiplier number 'the multiplier to use'
+local function handlerSet(handler, multiplier)
+  handler.set(
+    evolution * getVar('ZedEvolution.' .. handler.name) * multiplier,
+    handler.default, handler.limits, handler.div)
+end
+
 --- Get the evolution constraints for an attribute.
 ---@param name string 'Internal attribute name'
 ---@return table 'Min and max values for the attribute'
 local function getLimits(name)
   local values = {
-    SandboxVars.ZedEvolution[name .. 'Min'],
-    SandboxVars.ZedEvolution[name .. 'Limit'],
+    getVar('ZedEvolution.' .. name .. 'Min'),
+    getVar('ZedEvolution.' .. name .. 'Limit'),
   }
   return { min = math.min(unpack(values)), max = math.max(unpack(values)) }
 end
@@ -184,7 +207,7 @@ end
 ---@param set fun(f:number, d:number, l:table, div:number):nil 'function that sets the attribute'
 local function createSettingHandler (name, default, max, set)
   local limits = getLimits(name)
-  return {
+  handlers[name] = {
     limits = limits,
     div = 1 / (max - 1),
     default = default,
@@ -197,74 +220,73 @@ end
 ---@see handlers
 ---@see createSettingHandler
 local function createHandlers ()
-  handlers = {
-    -- Evolve speed over time only if speed is not randomized.
-    createSettingHandler('Speed', SandboxVars.ZombieLore.Speed, 3,
-      function (f, d, l, div)
-        if d ~= 4 then
-          getSandboxOptions():set('ZombieLore.Speed', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-        end 
-      end),
+  -- Evolve speed over time only if speed is not randomized.
+  createSettingHandler('Speed', getVar('ZombieLore.Speed'), 3,
+    function (f, d, l, div)
+      if d ~= 4 then
+        setVar('ZombieLore.Speed', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+      end 
+    end)
 
-    -- Evolve strength over time only if strength is not randomized.
-    createSettingHandler('Strength', SandboxVars.ZombieLore.Strength, 3,
-      function (f, d, l, div) 
-        if d ~= 4 then
-          getSandboxOptions():set('ZombieLore.Strength', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-        end 
-      end),
+  -- Evolve strength over time only if strength is not randomized.
+  createSettingHandler('Strength', getVar('ZombieLore.Strength'), 3,
+    function (f, d, l, div) 
+      if d ~= 4 then
+        setVar('ZombieLore.Strength', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+      end 
+    end)
 
-    -- Evolve toughness over time only if toughness is not randomized.
-    createSettingHandler('Toughness', SandboxVars.ZombieLore.Toughness, 3,
-      function (f, d, l, div) 
-        if d ~= 4 then 
-          getSandboxOptions():set('ZombieLore.Toughness', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-        end 
-      end),
+  -- Evolve toughness over time only if toughness is not randomized.
+  createSettingHandler('Toughness', getVar('ZombieLore.Toughness'), 3,
+    function (f, d, l, div) 
+      if d ~= 4 then 
+        setVar('ZombieLore.Toughness', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+      end 
+    end)
 
-    -- Evolve intelligence over time only if intelligence is not randomized.
-    createSettingHandler('Cognition', SandboxVars.ZombieLore.Cognition, 3,
-      function (f, d, l, div) 
-        if d ~= 4 then 
-          getSandboxOptions():set('ZombieLore.Cognition', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-        end
-      end),
+  -- Evolve intelligence over time only if intelligence is not randomized.
+  createSettingHandler('Cognition', getVar('ZombieLore.Cognition'), 3,
+    function (f, d, l, div) 
+      if d ~= 4 then 
+        setVar('ZombieLore.Cognition', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+      end
+    end)
 
-    -- Evolve ability to crawl under cars over time.
-    createSettingHandler('CrawlUnderVehicle', SandboxVars.ZombieLore.CrawlUnderVehicle, 7,
-      function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.CrawlUnderVehicle', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-      end),
+  -- Evolve ability to crawl under cars over time.
+  createSettingHandler('CrawlUnderVehicle', getVar('ZombieLore.CrawlUnderVehicle'), 7,
+    function (f, d, l, div) 
+      setVar('ZombieLore.CrawlUnderVehicle', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+    end)
 
-    -- Evolve memory over time.
-    createSettingHandler('Memory', SandboxVars.ZombieLore.Memory, 4,
-      function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.Memory', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)) )
-      end),
+  -- Evolve memory over time.
+  createSettingHandler('Memory', getVar('ZombieLore.Memory'), 4,
+    function (f, d, l, div) 
+      setVar('ZombieLore.Memory', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)) )
+    end)
 
-    -- Evolve vision over time.
-    createSettingHandler('Sight', SandboxVars.ZombieLore.Sight, 3,
-      function (f, d, l, div) 
-        getSandboxOptions():set('ZombieLore.Sight', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-      end),
+  -- Evolve vision over time.
+  createSettingHandler('Sight', getVar('ZombieLore.Sight'), 3,
+    function (f, d, l, div) 
+      setVar('ZombieLore.Sight', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+    end)
 
-    -- Evolve hearing over time.
-    createSettingHandler('Hearing', SandboxVars.ZombieLore.Hearing, 3,
-      function (f, d, l, div)
-        getSandboxOptions():set('ZombieLore.Hearing', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
-      end),
+  -- Evolve hearing over time.
+  createSettingHandler('Hearing', getVar('ZombieLore.Hearing'), 3,
+    function (f, d, l, div)
+      setVar('ZombieLore.Hearing', PZMath.roundToNearest(clamp(d - f / div, l.min, l.max)))
+    end)
 
-    -- Evolve transmission of zombie attacks over time only if not everyone is infected.
-    createSettingHandler('Transmission', SandboxVars.ZombieLore.Transmission, 3,
-      function (f, d, l, div) 
-        if d ~= 3 then
-          d = (d == 4) and 3 or d
-          local temp = PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max))
-          temp = (temp == 3) and 4 or temp
-          getSandboxOptions():set('ZombieLore.Transmission', temp)
-        end 
-      end),
-  }
+  -- Evolve transmission of zombie attacks over time only if not everyone is infected.
+  createSettingHandler('Transmission', getVar('ZombieLore.Transmission'), 3,
+    function (f, d, l, div) 
+      if d ~= 3 then
+        d = (d == 4) and 3 or d
+        local temp = PZMath.roundToNearest(PZMath.clamp(d - f / div, l.min, l.max))
+        temp = (temp == 3) and 4 or temp
+        setVar('ZombieLore.Transmission', temp)
+      end 
+    end)
+  --}
 end
 
 
@@ -278,7 +300,8 @@ end
 local function updateEvolution ()
   local gameTime = getGameTime()
   evolution = applyEvolutionFunction(
-    math.max(0, getTimeElapsed(gameTime) / 86400 - SandboxVars.ZedEvolution.Delay) + SandboxVars.ZedEvolution.StartSlow)
+    math.max(0, getTimeElapsed(gameTime) / 86400 - getVar('ZedEvolution.Delay')) + 
+    getVar('ZedEvolution.StartSlow'))
   print(modID, 'Evolution factor is now:', evolution)
 end
 
@@ -298,17 +321,28 @@ local function changeZombieStats (zombie)
   if modData[modID].interval > 0 then
     modData[modID].interval = modData[modID].interval - 1
   else
-    modData[modID].interval = ZombRand(400, 600)
-    for _, handler in ipairs(handlers) do 
-      handler.set(
-        evolution * SandboxVars.ZedEvolution[handler.name] * modData[modID][handler.name],
-        handler.default,
-        handler.limits,
-        handler.div)
+    -- Only update if the current process owns this zombie.
+    if (not isClient() and not isServer()) or (isClient() and not zombie:isRemoteZombie()) then
+      modData[modID].interval = 500
+
+      handlerSet(handlers.Speed, modData[modID].Speed)
+      handlerSet(handlers.Strength, modData[modID].Strength)
+      handlerSet(handlers.Toughness, modData[modID].Toughness)
+      handlerSet(handlers.Cognition, modData[modID].Cognition)
+      handlerSet(handlers.CrawlUnderVehicle, modData[modID].CrawlUnderVehicle)
+      handlerSet(handlers.Memory, modData[modID].Memory)
+      handlerSet(handlers.Sight, modData[modID].Sight)
+      handlerSet(handlers.Hearing, modData[modID].Hearing)
+
+      zombie:makeInactive(true)
+      zombie:makeInactive(false)
+      zombie:DoZombieStats()
     end
-    zombie:makeInactive(true)
-    zombie:makeInactive(false)
-    zombie:DoZombieStats()
+  end
+
+  -- If zombie attacks, make sure transmission is set correctly.
+  if zombie:isCurrentState(AttackState.instance()) and zombie:getVariableString('AttackOutcome') == 'success' then
+    handlerSet(handlers.Transmission, modData[modID].Transmission)
   end
 end
 
@@ -318,20 +352,16 @@ Events.OnGameTimeLoaded.Add(function ()
   Events.EveryHours.Remove(updateEvolution)
   Events.OnZombieUpdate.Remove(changeZombieStats)
 
-  if SandboxVars.ZedEvolution.DoEvolve then
+  if getVar('ZedEvolution.DoEvolve') then
     -- Init mod data and handlers.
     local modData = getGameTime():getModData()
     createHandlers()
     if modData[modID] ~= nil then
       updateToCurrentVersion(modData[modID])
-      for _, handler in ipairs(handlers) do 
-        handler.default = modData[modID][handler.name]
-      end
+      for name, handler in pairs(handlers) do handler.default = modData[modID][name] end
     else
       modData[modID] = { version = version }
-      for _, handler in ipairs(handlers) do 
-        modData[modID][handler.name] = handler.default 
-      end
+      for name, handler in pairs(handlers) do modData[modID][name] = handler.default end
     end
     createWeightFunctions()
     updateEvolution()

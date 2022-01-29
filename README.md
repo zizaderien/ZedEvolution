@@ -18,6 +18,7 @@ Make zombies change their speed, strength, toughness, cognition, ability to craw
 - For a linear function, you can specify how long it takes to reach 100% evolution.
 - For an asymptotic function, you can specify the base value, the limit, and how long it takes to reach 50% evolution.
 - For a cyclic function, you can specify how often it repeats, and between which numbers evolution fluctuates.
+- [See this page for visual examples for each setting.](https://github.com/Kayliii/ZedEvolution/wiki/Functions)
 
 ### Evolution Limits
 
@@ -50,15 +51,13 @@ Your translation needs to go in `ZedEvolution/Contents/mods/ZedEvolution/media/l
 
 ## Support
 
-This mod is in an experimental state, so be aware that you may run into issues. Please report issues with the mod so I can look into them!
+**This mod is in an experimental state!** Be aware that you may run into issues. If you report issues with the mod I can try to fix them!
 
 ### Known Incompatible Mods
 
-The mods listed below may cause issues or unpredictable behaviour when used in combination with the Evolution mod.
+[Full compatibility list](https://github.com/Kayliii/ZedEvolution/wiki/Compatibility-with-other-mods)
 
-- Xeph Zombie Modifications [Official].
-- A harder zombie mod.
-- Customizable Zombies.
+Any mod not on this list that you're curious about? Let me know!
 
 ## Links
 
