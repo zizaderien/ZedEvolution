@@ -11,10 +11,10 @@ option ZedEvolution.DoEvolve
 
 option ZedEvolution.Delay
 {
-	type = integer,
+	type = double,
 	default = 0,
-	min = -100000,
-	max = 100000,
+	min = -Infinity,
+	max = Infinity,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_Delay,
@@ -22,10 +22,10 @@ option ZedEvolution.Delay
 
 option ZedEvolution.StartSlow
 {
-	type = integer,
+	type = double,
 	default = 0,
-	min = -100000,
-	max = 100000,
+	min = -Infinity,
+	max = Infinity,
 
 	page = ZedEvolution,
 	translation = ZedEvolution_StartSlow,
