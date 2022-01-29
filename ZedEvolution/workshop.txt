@@ -1,5 +1,5 @@
 version=1
-title=Evolution
+title=Kayli's Evolution Mod [EXPERIMENTAL]
 description=[h1]Evolution Mod[/h1]
 description=Allows zombies to evolve various attributes over time.
 description=
