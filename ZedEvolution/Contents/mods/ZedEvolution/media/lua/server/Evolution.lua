@@ -53,13 +53,14 @@ local function clamp (value, min, max)
 end
 
 --- Get the os.time for given time data.
----@param year integer 'current year'
----@param month integer 'current month'
----@param day integer 'current day'
----@param hour number 'current hour'
+---@param year integer 'year'
+---@param month integer 'month'
+---@param day integer 'day'
+---@param hour integer 'hour'
+---@param hour integer 'minute'
 ---@return integer 'os.time'
-local function getTime (year, month, day, hour)
-  return os.time{ year = year, month = month, day = day, hour = math.floor(hour)}
+local function getTime (year, month, day, hour, minute)
+  return os.time{ year = year, month = month, day = day, hour = hour, min = minute}
 end
 
 --- Get the value for a sandbox option.
@@ -75,6 +76,20 @@ local function setVar (name, value)
   return getSandboxOptions():set(name, value)
 end
 
+--- Gets the hour from a GameTime TimeOfDay number.
+---@param timeOfDay number 'time of day'
+---@return integer 'hour'
+local function getHour (timeOfDay)
+  return math.floor(timeOfDay)
+end
+
+--- Gets the minute of a GameTime TimeOfDay number.
+---@param timeOfDay number 'time of day as given by GameTime'
+---@return integer 'minute'
+local function getMinute (timeOfDay) 
+  return math.floor((timeOfDay - getHour(timeOfDay)) * 60)
+end
+
 --- Get the os.difftime for both the current and start time.
 ---@param gameTime zombie.GameTime 'PZ GameTime object'
 ---@return integer 'seconds elapsed in world'
@@ -83,13 +98,15 @@ local function getTimeElapsed (gameTime)
     gameTime:getYear(),
     gameTime:getMonth(),
     gameTime:getDay(),
-    gameTime:getTimeOfDay())
+    getHour(gameTime:getTimeOfDay()),
+    getMinute(gameTime:getTimeOfDay()))
   local startTime = getTime(
     -- Can't use gameTime:getStart[...] for this because on servers it seems to return the wrong time for the client.
     getVar('StartYear') + getSandboxOptions():getFirstYear() - 1,
     getVar('StartMonth') -1,
     getVar('StartDay') -1,
-    gameTime:getStartTimeOfDay())
+    getHour(gameTime:getStartTimeOfDay()),
+    getMinute(gameTime:getStartTimeOfDay()))
   return os.difftime(nowTime, startTime)
 end
 
@@ -302,7 +319,6 @@ local function updateEvolution ()
   evolution = applyEvolutionFunction(
     math.max(0, getTimeElapsed(gameTime) / 86400 - getVar('ZedEvolution.Delay')) + 
     getVar('ZedEvolution.StartSlow'))
-  print(modID, 'Evolution factor is now:', evolution)
 end
 
 --- Update a zombie's attributes.
@@ -349,7 +365,7 @@ end
 --- Enable the mod in this world only if evolution is enabled.
 Events.OnGameTimeLoaded.Add(function ()
   -- Remove leftover handlers.
-  Events.EveryHours.Remove(updateEvolution)
+  Events.EveryOneMinute.Remove(updateEvolution)
   Events.OnZombieUpdate.Remove(changeZombieStats)
 
   if getVar('ZedEvolution.DoEvolve') then
@@ -367,7 +383,7 @@ Events.OnGameTimeLoaded.Add(function ()
     updateEvolution()
 
     -- Update evolution level & zombie stats
-    Events.EveryHours.Add(updateEvolution)
+    Events.EveryOneMinute.Add(updateEvolution)
     Events.OnZombieUpdate.Add(changeZombieStats)
   end
 end)
