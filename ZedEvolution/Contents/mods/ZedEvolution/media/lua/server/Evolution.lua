@@ -303,7 +303,6 @@ local function createHandlers ()
         setVar('ZombieLore.Transmission', temp)
       end 
     end)
-  --}
 end
 
 
